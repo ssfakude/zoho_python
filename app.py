@@ -22,7 +22,7 @@ import time
 from dateutil.relativedelta import relativedelta # to add days or years
 # emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
 
-
+start = timeit.default_timer()
 st.set_page_config(page_title="1 Nav sync Zoho", page_icon="rc_logo.ico")
 
 
@@ -95,7 +95,7 @@ elif authentication_status:
                     #st.write(file_details)
                     xls = pd.ExcelFile(data_file)
                     df_Order = pd.read_excel(xls, 'Open Released')
-                    df_Invoiced = pd.read_excel(xls, 'Posted Invoices ')
+                    df_Invoiced = pd.read_excel(xls, 'Posted Invoices')
                     df_Return = pd.read_excel(xls, 'SRT')
                     # st.write(file_details)
                     # df = pd.read_csv(data_file)
@@ -151,8 +151,20 @@ elif authentication_status:
 
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             
-                            req = requests.get(url = URL, headers= headers,  timeout=(2, 5))
-                            #print(so_number)
+
+
+
+                            try:
+                                req = requests.get(url = URL, headers= headers)
+                
+                            except:
+                                print("Connection refused by the server..")
+                                print("Let me sleep for 5 seconds")
+                                print("ZZzzzz...")
+                                time.sleep(2)
+                                print("Was a nice sleep, now let me continue...")
+                    
+                        
                             
                             if req.status_code == 200:
                                 data_respo = json.loads(req.text)
@@ -172,9 +184,15 @@ elif authentication_status:
                                     "cf_1nav_overdue_bal":cf_1nav_overdue_bal,
                                     "cf_1nav_credit_hold":cf_1nav_credit_hold
                                     }
-                                    }	
-                                r = requests.patch(url, headers=headers, json=data,  timeout=(2, 5))
-                                #print(r.text)
+                                }	
+                                try:
+                                    r = requests.patch(url, headers=headers, json=data)
+                                except:
+                                    print("Connection refused by the server..")
+                                    print("Let me sleep for 5 seconds")
+                                    print("ZZzzzz...")
+                                    time.sleep(3)
+                                    print("Was a nice sleep, now let me continue...")
                             
                             else:
                                 not_found_order.append(so_number)
@@ -199,7 +217,18 @@ elif authentication_status:
                         
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
-                            req = requests.get(url = URL, headers= headers,  timeout=(2, 5))
+                            
+
+                            try:
+                                req = requests.get(url = URL, headers= headers)
+                               
+                            except:
+                                print("Connection refused by the server..")
+                                print("Let me sleep for 3 seconds")
+                                print("ZZzzzz...")
+                                time.sleep(3)
+                                print("Was a nice sleep, now let me continue...")
+                            
 
                             if req.status_code == 200:
                                 data_resp = json.loads(req.text)
@@ -219,8 +248,16 @@ elif authentication_status:
                         "cf_1nav_shipping_date":cf_1nav_shipping_date,
                     }
                     }		
-                                r = requests.patch(url, headers=headers, json=data,  timeout=(2, 5))
-                                #print(r.text)
+                                try:
+                                    r = requests.patch(url, headers=headers, json=data)
+                                
+                                except:
+                                    print("Connection refused by the server..")
+                                    print("Let me sleep for 3 seconds")
+                                    print("ZZzzzz...")
+                                    time.sleep(3)
+                                    print("Was a nice sleep, now let me continue...")
+                            
                             
                             else:
                                 not_found_invoiced.append(so_number)
@@ -240,8 +277,19 @@ elif authentication_status:
                             
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
-                            req = requests.get(url = URL, headers= headers,  timeout=(2, 5))
                             
+                            
+                            try:
+                                req = requests.get(url = URL, headers= headers)
+                                
+                            except:
+                                print("Connection refused by the server..")
+                                print("Let me sleep for 3 seconds")
+                                print("ZZzzzz...")
+                                time.sleep(3)
+                                print("Was a nice sleep, now let me continue...")
+
+
                             if req.status_code == 200:
                                 data_resp = json.loads(req.text)
                                 ticket_id = data_resp['data'][0]['id']
@@ -257,9 +305,17 @@ elif authentication_status:
 
                             }
                             }
-                                r = requests.patch(url, headers=headers, json=data,  timeout=(2, 5))
-                                #print(r.text)
-                            
+                                
+                                try:
+                                    r = requests.patch(url, headers=headers, json=data)
+                                
+                                except:
+                                    print("Connection refused by the server..")
+                                    print("Let me sleep for 5 seconds")
+                                    print("ZZzzzz...")
+                                    time.sleep(5)
+                                    print("Was a nice sleep, now let me continue...")
+                                
                             else:
                                 not_found_return.append(so_number)
                 
@@ -281,12 +337,9 @@ elif authentication_status:
                     <br>
                     <body><p>-----------------------<strong>SRT</strong>---------------------------- <br></p></body>
                     </html>"""+ str(not_found_return)
-                    start = timeit.default_timer()
+                    
                 
-                    print("-----------------------------------------------")
-                    stop = timeit.default_timer()
-                    execution_time = stop - start
-                    print (f"Run Time: {execution_time:.2f} Seconds")
+              
 
 
                     email_body = """<html>
@@ -326,9 +379,13 @@ elif authentication_status:
                     r = requests.post(url, headers=headers, json=data)
 
                    
-                    st.markdown("<h1 style='text-align: center; color: white;'>Synchronization completed</h1>", unsafe_allow_html=True)
+                    st.markdown("<h2 style='text-align: center; color: white;'>Synchronization completed!</h2>", unsafe_allow_html=True)
                     lottie_nodata=load_lottieurl("https://assets4.lottiefiles.com/packages/lf20_htmzfjyu.json")
                     st_lottie(lottie_nodata, key="done", width=350)
+                    print("-----------------------------------------------")
+                    stop = timeit.default_timer()
+                    execution_time = stop - start
+                    print (f"Run Time: {execution_time:.2f} Seconds")
                     
 
 
