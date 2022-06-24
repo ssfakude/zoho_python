@@ -51,7 +51,7 @@ def refresh_auth():
     return data['access_token']
 
 
-
+access_token = refresh_auth()
 
 not_found_order =[]
 not_found_invoiced =[]
@@ -107,7 +107,7 @@ elif authentication_status:
                     # with right_column:
                     #     st.dataframe(df_Return)
 
-                    access_token = refresh_auth()
+                    
                     headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
                     for i, j in df_Order.iterrows():
                         so_number = j[1]
@@ -151,7 +151,7 @@ elif authentication_status:
 
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             
-                            req = requests.get(url = URL, headers= headers)
+                            req = requests.get(url = URL, headers= headers,  timeout=(2, 5))
                             #print(so_number)
                             
                             if req.status_code == 200:
@@ -173,7 +173,7 @@ elif authentication_status:
                                     "cf_1nav_credit_hold":cf_1nav_credit_hold
                                     }
                                     }	
-                                r = requests.patch(url, headers=headers, json=data)
+                                r = requests.patch(url, headers=headers, json=data,  timeout=(2, 5))
                                 #print(r.text)
                             
                             else:
@@ -199,7 +199,7 @@ elif authentication_status:
                         
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
-                            req = requests.get(url = URL, headers= headers)
+                            req = requests.get(url = URL, headers= headers,  timeout=(2, 5))
 
                             if req.status_code == 200:
                                 data_resp = json.loads(req.text)
@@ -219,7 +219,7 @@ elif authentication_status:
                         "cf_1nav_shipping_date":cf_1nav_shipping_date,
                     }
                     }		
-                                r = requests.patch(url, headers=headers, json=data)
+                                r = requests.patch(url, headers=headers, json=data,  timeout=(2, 5))
                                 #print(r.text)
                             
                             else:
@@ -240,7 +240,7 @@ elif authentication_status:
                             
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
-                            req = requests.get(url = URL, headers= headers)
+                            req = requests.get(url = URL, headers= headers,  timeout=(2, 5))
                             
                             if req.status_code == 200:
                                 data_resp = json.loads(req.text)
@@ -257,7 +257,7 @@ elif authentication_status:
 
                             }
                             }
-                                r = requests.patch(url, headers=headers, json=data)
+                                r = requests.patch(url, headers=headers, json=data,  timeout=(2, 5))
                                 #print(r.text)
                             
                             else:
