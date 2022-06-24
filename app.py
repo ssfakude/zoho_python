@@ -135,7 +135,7 @@ elif authentication_status:
                                 desk_status = "Pending - awaiting shipment"
 
                             
-                            if nav_overdue_bal  <1:
+                            if nav_overdue_bal  <1 or str(nav_overdue_bal) =="FALSE" :
                                 cf_1nav_overdue_bal = "false"
                         
                             else:
@@ -143,7 +143,7 @@ elif authentication_status:
 
 
 
-                            if  nav_credit_hold <1:
+                            if  nav_credit_hold <1 or str(nav_credit_hold) =="FALSE" :
                                 cf_1nav_credit_hold = "false"
                             else:
                                 cf_1nav_credit_hold ="true"
@@ -344,7 +344,7 @@ elif authentication_status:
 
                     email_body = """<html>
                     <head></head>
-                    <body><p>Hi, <br><br></p> The intergration has been completed<br>Best,</body>
+                    <body><p>Hi, <br><br></p> The intergration has been completed<br><br>Best,</body>
                     </html>"""
 
                     url = "https://desk.zoho.com/api/v1/tickets"
@@ -380,12 +380,13 @@ elif authentication_status:
 
                    
                     st.markdown("<h2 style='text-align: center; color: white;'>Synchronization completed!</h2>", unsafe_allow_html=True)
-                    lottie_nodata=load_lottieurl("https://assets4.lottiefiles.com/packages/lf20_htmzfjyu.json")
-                    st_lottie(lottie_nodata, key="done", width=350)
+                    lottie_nodata=load_lottieurl("https://assets7.lottiefiles.com/private_files/lf30_rjqwaenm.json")
+                    st_lottie(lottie_nodata, key="done", width=270)
                     print("-----------------------------------------------")
                     stop = timeit.default_timer()
                     execution_time = stop - start
                     print (f"Run Time: {execution_time:.2f} Seconds")
+                    st.subheader(f"Run Time: {execution_time:.2f} Seconds")
                     
 
 
