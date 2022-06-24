@@ -1,0 +1,8 @@
+plotly
+pip
+pandas
+streamlit
+openpyxl
+protobuf
+streamlit-lottie
+streamlit-authenticator
