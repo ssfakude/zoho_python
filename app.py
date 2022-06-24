@@ -23,7 +23,7 @@ from dateutil.relativedelta import relativedelta # to add days or years
 # emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
 
 
-st.set_page_config(page_title="Tickets Dashboard", page_icon="rc_logo.ico")
+st.set_page_config(page_title="1 Nav sync Zoho", page_icon="rc_logo.ico")
 
 
 CLIENT_ID = '1000.0G3DK4Y761UL7AHEKYKIMHQLTXWJLO'
