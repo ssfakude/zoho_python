@@ -80,7 +80,7 @@ elif authentication_status:
         return r.json()
     st.write(f'Welcome  *{name}*')
     lottie_dog=load_lottieurl("https://assets7.lottiefiles.com/packages/lf20_xBGyhl.json")
-    with st_lottie_spinner(lottie_dog, width= 500, key="dog"):
+    with st_lottie_spinner(lottie_dog, width= 400, key="dog"):
         #time.sleep(4)
         def main():
             st.title("Please dump the 1 Nav report here:)")
@@ -291,7 +291,7 @@ elif authentication_status:
 
                     email_body = """<html>
                     <head></head>
-                    <body><p>Hi, <br><br></p> The intergration has been completed</body>
+                    <body><p>Hi, <br><br></p> The intergration has been completed<br>Best,</body>
                     </html>"""
 
                     url = "https://desk.zoho.com/api/v1/tickets"
@@ -325,9 +325,10 @@ elif authentication_status:
                     }
                     r = requests.post(url, headers=headers, json=data)
 
-
+                   
+                    st.markdown("<h1 style='text-align: center; color: white;'>Synchronization completed</h1>", unsafe_allow_html=True)
                     lottie_nodata=load_lottieurl("https://assets4.lottiefiles.com/packages/lf20_htmzfjyu.json")
-                    st_lottie(lottie_nodata, key="done", width=600)
+                    st_lottie(lottie_nodata, key="done", width=350)
                     
 
 
