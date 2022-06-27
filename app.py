@@ -80,7 +80,7 @@ elif authentication_status:
         return r.json()
     st.write(f'Welcome  *{name}*')
     lottie_dog=load_lottieurl("https://assets7.lottiefiles.com/packages/lf20_xBGyhl.json")
-    with st_lottie_spinner(lottie_dog, width= 400, key="dog"):
+    with st_lottie_spinner(lottie_dog, width= 300, key="dog"):
         #time.sleep(4)
         def main():
             st.title("1 Nav + Zoho Intergration")
@@ -365,8 +365,8 @@ elif authentication_status:
 
                     email_body = """<html>
                     <head></head>
-                    <body><p>Hi, <br><br></p> The intergration has been completed<br><br>Runtime: </body>
-                    </html>""" +execution_time
+                    <body><p>Hi, <br><br></p> The intergration has been completed<br><br> </body>
+                    </html>""" +"Runtime: "+ str(round(execution_time,2))+" seconds."
 
                     url = "https://desk.zoho.com/api/v1/tickets"
                     data ={ "subject":"SO Number not Found in CRM",
