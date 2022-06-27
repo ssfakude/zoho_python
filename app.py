@@ -128,6 +128,7 @@ elif authentication_status:
                     headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
                     for i, j in df_Order.iterrows():
                         so_number = j[1]
+                        st.stop()
                         if pd.isna(so_number) ==True:
                             break
                         else:
