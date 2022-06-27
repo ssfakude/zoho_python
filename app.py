@@ -83,7 +83,7 @@ elif authentication_status:
     with st_lottie_spinner(lottie_dog, width= 400, key="dog"):
         #time.sleep(4)
         def main():
-            st.title("Please dump the 1 Nav report here:)")
+            st.title("1 Nav + Zoho Intergration")
             st.subheader("The file should contain this 3 sheets:")
             data_file = st.file_uploader("[Open Released, Posted Invoices ,SRT]",type=['xlsx'])
             # lottie_nodata=load_lottieurl("https://assets6.lottiefiles.com/packages/lf20_5awivhzm.json")
@@ -94,9 +94,26 @@ elif authentication_status:
                     file_details = {"Filename":data_file.name,"FileType":data_file.type,"FileSize":data_file.size}
                     #st.write(file_details)
                     xls = pd.ExcelFile(data_file)
-                    df_Order = pd.read_excel(xls, 'Open Released')
-                    df_Invoiced = pd.read_excel(xls, 'Posted Invoices')
-                    df_Return = pd.read_excel(xls, 'SRT')
+                    
+                    try:
+                       df_Order = pd.read_excel(xls, 'Open Released')
+                    except Exception as e:
+                        st.error("Incorect Sheet name for Open Released:(")
+                        st.stop()
+                    try:
+                       df_Invoiced = pd.read_excel(xls, 'Posted Invoices')
+                    except Exception as e:
+                        st.error("Incorect Sheet name for Posted Invoices:(")
+                        st.stop()
+                        
+                    try:
+                       df_Return = pd.read_excel(xls, 'SRT')
+                    except Exception as e:
+                        st.error("Incorect Sheet name for SRT:(")
+                        st.stop()
+
+                    
+                    
                     # st.write(file_details)
                     # df = pd.read_csv(data_file)
                     # left_column, middle_column, right_column  = st.columns(3)
@@ -182,7 +199,8 @@ elif authentication_status:
                                     "cf_1nav_amount":cf_1nav_amount,
                                     "cf_1nav_net_weight":cf_1nav_net_weight,
                                     "cf_1nav_overdue_bal":cf_1nav_overdue_bal,
-                                    "cf_1nav_credit_hold":cf_1nav_credit_hold
+                                    "cf_1nav_credit_hold":cf_1nav_credit_hold,
+                                    "cf_added_by": name
                                     }
                                 }	
                                 try:
@@ -246,6 +264,7 @@ elif authentication_status:
                         "cf_1nav_net_weight":cf_1nav_net_weight,
                         "cf_1nav_req_del_date":cf_1nav_req_del_date,
                         "cf_1nav_shipping_date":cf_1nav_shipping_date,
+                         "cf_added_by": name
                     }
                     }		
                                 try:
@@ -302,6 +321,7 @@ elif authentication_status:
                         "cf_1_nav_sync":"true",
                         "cf_1nav_customer_name":cf_1nav_customer_name,
                         "cf_1nav_sales_resp":cf_1nav_sales_resp,
+                         "cf_added_by": name
 
                             }
                             }
@@ -318,7 +338,8 @@ elif authentication_status:
                                 
                             else:
                                 not_found_return.append(so_number)
-                
+                    stop = timeit.default_timer()
+                    execution_time = stop - start
                     c = """<html>
                     <head></head>
                     <body><p>Hi Naz and Cindy, <br><br></p></body>
@@ -344,8 +365,8 @@ elif authentication_status:
 
                     email_body = """<html>
                     <head></head>
-                    <body><p>Hi, <br><br></p> The intergration has been completed<br><br>Best,</body>
-                    </html>"""
+                    <body><p>Hi, <br><br></p> The intergration has been completed<br><br>Runtime: </body>
+                    </html>""" +execution_time
 
                     url = "https://desk.zoho.com/api/v1/tickets"
                     data ={ "subject":"SO Number not Found in CRM",
@@ -367,9 +388,9 @@ elif authentication_status:
                     data = {
                     "fromAddress":"simphiwef@boomerangsa.co.za",
                     "toAddress": username+"@boomerangsa.co.za",
-                    "ccAddress": "",
+                    "ccAddress": "simphiwef@boomerangsa.co.za",
                     "bccAddress": "",
-                    "subject": "Zoho Intergration completed",
+                    "subject": "Zoho Desk Intergration completed",
                     "content": email_body,
                     "askReceipt": "no"
                     }
@@ -379,12 +400,14 @@ elif authentication_status:
                     r = requests.post(url, headers=headers, json=data)
 
                    
+
+
+
                     st.markdown("<h2 style='text-align: center; color: white;'>Synchronization completed!</h2>", unsafe_allow_html=True)
                     lottie_nodata=load_lottieurl("https://assets7.lottiefiles.com/private_files/lf30_rjqwaenm.json")
                     st_lottie(lottie_nodata, key="done", width=270)
                     print("-----------------------------------------------")
-                    stop = timeit.default_timer()
-                    execution_time = stop - start
+
                     print (f"Run Time: {execution_time:.2f} Seconds")
                     st.subheader(f"Run Time: {execution_time:.2f} Seconds")
                     
