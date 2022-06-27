@@ -143,6 +143,7 @@ elif authentication_status:
                             cf_1nav_sales_resp = j[9]
                             cf_1nav_net_weight = j[11]
                             cf_1nav_amount = j[18]
+                            cf_1nav_location_code = j[10]
                             
                             status_ = j[0]
                             if status_ == "Open":
@@ -200,6 +201,7 @@ elif authentication_status:
                                     "cf_1nav_net_weight":cf_1nav_net_weight,
                                     "cf_1nav_overdue_bal":cf_1nav_overdue_bal,
                                     "cf_1nav_credit_hold":cf_1nav_credit_hold,
+                                    "cf_1nav_location_code": cf_1nav_location_code,
                                     "cf_added_by": name
                                     }
                                 }	
@@ -225,10 +227,11 @@ elif authentication_status:
                             
                             so_number = so_number[5:]
                             cf_1nav_customer_name= j[2]
-                            cf_1nav_cus_price_grp =j[8]
+                            #cf_1nav_cus_price_grp =j[8]
                             cf_1nav_sales_resp = j[6]
                             cf_1nav_net_weight = j[9]
                             cf_1nav_amount = j[3]
+                            cf_1nav_location_code = j[8]
                             cf_1nav_req_del_date = str(j[5])[:10]
                             cf_1nav_shipping_date = str(j[11])[:10]
                         
@@ -258,12 +261,12 @@ elif authentication_status:
                         "cf_1_nav_sync":"true",
                         "cf_1nav_status":"Invoiced",
                         "cf_1nav_customer_name":cf_1nav_customer_name,
-                        "cf_1nav_cus_price_grp":cf_1nav_cus_price_grp,
                         "cf_1nav_sales_resp":cf_1nav_sales_resp,
                         "cf_1nav_amount":cf_1nav_amount,
                         "cf_1nav_net_weight":cf_1nav_net_weight,
                         "cf_1nav_req_del_date":cf_1nav_req_del_date,
                         "cf_1nav_shipping_date":cf_1nav_shipping_date,
+                        "cf_1nav_location_code": cf_1nav_location_code,
                          "cf_added_by": name
                     }
                     }		
@@ -293,6 +296,7 @@ elif authentication_status:
                             cf_1nav_customer_name = j[2]
                             cf_1nav_sales_resp = j[3]
                             so_number = so_number[6:]
+                            cf_1nav_location_code =j[4]
                             
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
@@ -321,6 +325,7 @@ elif authentication_status:
                         "cf_1_nav_sync":"true",
                         "cf_1nav_customer_name":cf_1nav_customer_name,
                         "cf_1nav_sales_resp":cf_1nav_sales_resp,
+                        "cf_1nav_location_code": cf_1nav_location_code,
                          "cf_added_by": name
 
                             }
