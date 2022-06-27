@@ -128,7 +128,7 @@ elif authentication_status:
                     headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
                     for i, j in df_Order.iterrows():
                         so_number = j[1]
-                        st.stop()
+                        
                         if pd.isna(so_number) ==True:
                             break
                         else:
@@ -229,7 +229,7 @@ elif authentication_status:
                             so_number = so_number[5:]
                             cf_1nav_customer_name= j[2]
                             #cf_1nav_cus_price_grp =j[8]
-                            cf_1nav_sales_resp = j[6]
+                            cf_1nav_sales_resp = j[7]
                             cf_1nav_net_weight = j[9]
                             cf_1nav_amount = j[3]
                             cf_1nav_location_code = j[8]
