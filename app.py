@@ -267,6 +267,8 @@ elif authentication_status:
                         "cf_1nav_req_del_date":cf_1nav_req_del_date,
                         "cf_1nav_shipping_date":cf_1nav_shipping_date,
                         "cf_1nav_location_code": cf_1nav_location_code,
+                        "cf_1nav_overdue_bal":"false",
+                        "cf_1nav_credit_hold":"false",
                          "cf_added_by": name
                     }
                     }		
@@ -326,6 +328,8 @@ elif authentication_status:
                         "cf_1nav_customer_name":cf_1nav_customer_name,
                         "cf_1nav_sales_resp":cf_1nav_sales_resp,
                         "cf_1nav_location_code": cf_1nav_location_code,
+                        "cf_1nav_overdue_bal":"false",
+                        "cf_1nav_credit_hold":"false",
                          "cf_added_by": name
 
                             }
