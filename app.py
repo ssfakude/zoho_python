@@ -83,7 +83,7 @@ elif authentication_status:
     with st_lottie_spinner(lottie_dog, width= 300, key="dog"):
         #time.sleep(4)
         def main():
-            st.title("1 Nav + Zoho Intergration")
+            st.title("1 Nav + Zoho Integration")
             st.subheader("The file should contain this 3 sheets:")
             data_file = st.file_uploader("[Open Released, Posted Invoices ,SRT]",type=['xlsx'])
             # lottie_nodata=load_lottieurl("https://assets6.lottiefiles.com/packages/lf20_5awivhzm.json")
@@ -375,7 +375,7 @@ elif authentication_status:
 
                     email_body = """<html>
                     <head></head>
-                    <body><p>Hi, <br><br></p> The intergration has been completed<br><br> </body>
+                    <body><p>Hi, <br><br></p> The Integration has been completed<br><br> </body>
                     </html>""" +"Runtime: "+ str(round(execution_time,2))+" seconds."
 
                     url = "https://desk.zoho.com/api/v1/tickets"
@@ -400,7 +400,7 @@ elif authentication_status:
                     "toAddress": username+"@boomerangsa.co.za",
                     "ccAddress": "simphiwef@boomerangsa.co.za",
                     "bccAddress": "",
-                    "subject": "Zoho Desk Intergration completed",
+                    "subject": "Zoho Desk Integration completed",
                     "content": email_body,
                     "askReceipt": "no"
                     }
