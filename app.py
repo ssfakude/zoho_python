@@ -141,7 +141,7 @@ elif authentication_status:
                     len_df_Order =len(df_Order.index)
                     for i, j in df_Order.iterrows():
                         so_number = j[1]
-                        latest_iteration.text(f'{len_df_Order - i} records left - {j[1]}')
+                        latest_iteration.text(f'Open Released: {len_df_Order - i} records left - {j[1]}')
                         if pd.isna(so_number) ==True:
                             break
                         else:
@@ -241,7 +241,7 @@ elif authentication_status:
                     latest_iteration = st.empty()
                     len_df_Invoiced =len(df_Invoiced.index)
                     for i, j in df_Invoiced.iterrows():
-                        latest_iteration.text(f'{len_df_Invoiced-(len_df_Invoiced - i)//100}% done - {j[1]}')
+                        latest_iteration.text(f'Invoiced: {((len_df_Invoiced - i))} records left - {j[6]}')
                         so_number = j[6]
                         if pd.isna(so_number) ==True:
                             break
@@ -319,7 +319,7 @@ elif authentication_status:
                     len_df_Return =len(df_Return.index)
                     for i, j in df_Return.iterrows():
                         so_number = j[0]
-                        latest_iteration.text(f'{len_df_Return - i} records left - {j[1]}')
+                        latest_iteration.text(f'SRT: {len_df_Return - i} records left - {j[0]}')
                         if pd.isna(so_number) ==True:
                             break
                         else:
