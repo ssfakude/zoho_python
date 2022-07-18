@@ -19,6 +19,8 @@ from streamlit_lottie import st_lottie
 from streamlit_lottie import st_lottie_spinner
 import datetime as dt
 import time
+from datetime import datetime
+from datetime import timedelta
 from dateutil.relativedelta import relativedelta # to add days or years
 # emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
 
@@ -81,6 +83,32 @@ elif authentication_status:
     st.write(f'Welcome  *{name}*')
     lottie_dog=load_lottieurl("https://assets7.lottiefiles.com/packages/lf20_xBGyhl.json")
     with st_lottie_spinner(lottie_dog, width= 300, key="dog"):
+
+        @st.cache()
+        def read_file(data_file):
+            #st.write(file_details)
+            xls = pd.ExcelFile(data_file)
+            
+            try:
+                df_Order = pd.read_excel(xls, 'Open Released')
+            except Exception as e:
+                st.error("Incorect Sheet name for Open Released:(")
+                st.stop()
+            try:
+                df_Invoiced = pd.read_excel(xls, 'Posted Invoices')
+            except Exception as e:
+                st.error("Incorect Sheet name for Posted Invoices:(")
+                st.stop() 
+            try:
+                df_Return = pd.read_excel(xls, 'SRT')
+            except Exception as e:
+                st.error("Incorect Sheet name for SRT:(")
+                st.stop()
+            return df_Order, df_Invoiced, df_Return
+
+
+
+
         #time.sleep(4)
         def main():
             st.title("1 Nav + Zoho Integration")
@@ -92,27 +120,10 @@ elif authentication_status:
 
                 if data_file is not None:
                     file_details = {"Filename":data_file.name,"FileType":data_file.type,"FileSize":data_file.size}
-                    #st.write(file_details)
-                    xls = pd.ExcelFile(data_file)
-                    
-                    try:
-                       df_Order = pd.read_excel(xls, 'Open Released')
-                    except Exception as e:
-                        st.error("Incorect Sheet name for Open Released:(")
-                        st.stop()
-                    try:
-                       df_Invoiced = pd.read_excel(xls, 'Posted Invoices')
-                    except Exception as e:
-                        st.error("Incorect Sheet name for Posted Invoices:(")
-                        st.stop()
-                        
-                    try:
-                       df_Return = pd.read_excel(xls, 'SRT')
-                    except Exception as e:
-                        st.error("Incorect Sheet name for SRT:(")
-                        st.stop()
 
-                    
+                    df_Order = read_file(data_file)[0]
+                    df_Invoiced = read_file(data_file)[1]
+                    df_Return =read_file(data_file)[2]
                     
                     # st.write(file_details)
                     # df = pd.read_csv(data_file)
@@ -126,9 +137,11 @@ elif authentication_status:
 
                     
                     headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
+                    latest_iteration = st.empty()
+                    len_df_Order =len(df_Order.index)
                     for i, j in df_Order.iterrows():
                         so_number = j[1]
-                        
+                        latest_iteration.text(f'{len_df_Order - i} records left - {j[1]}')
                         if pd.isna(so_number) ==True:
                             break
                         else:
@@ -145,7 +158,11 @@ elif authentication_status:
                             cf_1nav_net_weight = j[11]
                             cf_1nav_amount = j[18]
                             cf_1nav_location_code = j[10]
-                            
+                            now = datetime.now()-timedelta(hours=2)
+    
+                         
+                            dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+                            sync_date=dt_string.replace(" ", "T")+ ".000Z"
                             status_ = j[0]
                             if status_ == "Open":
                                 #desk_status = "Approval Rejected"
@@ -203,6 +220,8 @@ elif authentication_status:
                                     "cf_1nav_overdue_bal":cf_1nav_overdue_bal,
                                     "cf_1nav_credit_hold":cf_1nav_credit_hold,
                                     "cf_1nav_location_code": cf_1nav_location_code,
+                                    "cf_1nav_sync_time": sync_date,
+
                                     "cf_added_by": name
                                     }
                                 }	
@@ -219,8 +238,10 @@ elif authentication_status:
                                 not_found_order.append(so_number)
                     
 
-
+                    latest_iteration = st.empty()
+                    len_df_Invoiced =len(df_Invoiced.index)
                     for i, j in df_Invoiced.iterrows():
+                        latest_iteration.text(f'{len_df_Invoiced-(len_df_Invoiced - i)//100}% done - {j[1]}')
                         so_number = j[6]
                         if pd.isna(so_number) ==True:
                             break
@@ -235,6 +256,11 @@ elif authentication_status:
                             cf_1nav_location_code = j[8]
                             cf_1nav_req_del_date = str(j[5])[:10]
                             cf_1nav_shipping_date = str(j[11])[:10]
+                            now = datetime.now()
+    
+                         
+                            dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+                            sync_date = dt_string.replace(" ", "T")+ ".000Z"
                         
                         
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
@@ -270,6 +296,7 @@ elif authentication_status:
                         "cf_1nav_location_code": cf_1nav_location_code,
                         "cf_1nav_overdue_bal":"false",
                         "cf_1nav_credit_hold":"false",
+                        "cf_1nav_sync_time": sync_date,
                          "cf_added_by": name
                     }
                     }		
@@ -289,9 +316,10 @@ elif authentication_status:
                     
 
                 
-
+                    len_df_Return =len(df_Return.index)
                     for i, j in df_Return.iterrows():
                         so_number = j[0]
+                        latest_iteration.text(f'{len_df_Return - i} records left - {j[1]}')
                         if pd.isna(so_number) ==True:
                             break
                         else:
@@ -300,6 +328,11 @@ elif authentication_status:
                             cf_1nav_sales_resp = j[3]
                             so_number = so_number[6:]
                             cf_1nav_location_code =j[4]
+                            now = datetime.now()
+    
+                         
+                            dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+                            sync_date = dt_string.replace(" ", "T")+ ".000Z"
                             
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
@@ -331,11 +364,11 @@ elif authentication_status:
                         "cf_1nav_location_code": cf_1nav_location_code,
                         "cf_1nav_overdue_bal":"false",
                         "cf_1nav_credit_hold":"false",
+                        "cf_1nav_sync_time": sync_date,
                          "cf_added_by": name
 
                             }
                             }
-                                
                                 try:
                                     r = requests.patch(url, headers=headers, json=data)
                                 
