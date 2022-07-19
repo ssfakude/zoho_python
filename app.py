@@ -58,7 +58,7 @@ access_token = refresh_auth()
 not_found_order =[]
 not_found_invoiced =[]
 not_found_return =[]
-logs =[]
+time_out =[]
 #----------User AUth----------
 names = ["Simphiwe Fakude", "Robert Jacobs", "Robert joubert","Jean-Pierre Myburg","Paul Oosthuizen", "Lee Douglas Webster", "Nazley Miranda", "Cindy Santamaria","Natasha Naidoo", "Carla kolbe",  "RC Admin"]
 usernames = ["simphiwef", "robertj","robert", "jp","paulo","leew","nazleym","cindys","natashan","carla",  "rcadmin"]
@@ -139,7 +139,7 @@ elif authentication_status:
                     
                     headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
                     latest_iteration = st.empty()
-                    print("-----------------------Invoiced-------------------")
+                    print("-----------------------Open Released-------------------")
                     len_df_Order =len(df_Order.index)
                     for i, j in df_Order.iterrows():
                         so_number = j[1]
@@ -163,7 +163,7 @@ elif authentication_status:
                             cf_1nav_net_weight = j[11]
                             cf_1nav_amount = j[18]
                             cf_1nav_location_code = j[10]
-                            now = datetime.now()-timedelta(hours=2)
+                            now = datetime.now()+timedelta(hours=2)
     
                          
                             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -236,6 +236,7 @@ elif authentication_status:
                                     print("Connection refused by the server..")
                                     print("Let me sleep for 5 seconds")
                                     print("ZZzzzz...")
+                                    time_out.append(so_number)
                                     time.sleep(3)
                                     print("Was a nice sleep, now let me continue...")
                                 
@@ -266,7 +267,7 @@ elif authentication_status:
                             cf_1nav_location_code = j[8]
                             cf_1nav_req_del_date = str(j[5])[:10]
                             cf_1nav_shipping_date = str(j[11])[:10]
-                            now = datetime.now()
+                            now = datetime.now()+timedelta(hours=2)
     
                          
                             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -318,6 +319,7 @@ elif authentication_status:
                                     print("Let me sleep for 3 seconds")
                                     print("ZZzzzz...")
                                     time.sleep(3)
+                                    time_out.append(so_number)
                                     print("Was a nice sleep, now let me continue...")
                             
                             
@@ -342,7 +344,7 @@ elif authentication_status:
                             cf_1nav_sales_resp = j[3]
                             so_number = so_number[6:]
                             cf_1nav_location_code =j[4]
-                            now = datetime.now()
+                            now = datetime.now()+timedelta(hours=2)
     
                          
                             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -391,6 +393,7 @@ elif authentication_status:
                                     print("Let me sleep for 5 seconds")
                                     print("ZZzzzz...")
                                     time.sleep(5)
+                                    time_out.append(so_number)
                                     print("Was a nice sleep, now let me continue...")
                                 
                             else:
@@ -415,7 +418,11 @@ elif authentication_status:
                     <head></head>
                     <br>
                     <body><p>-----------------------<strong>SRT</strong>---------------------------- <br></p></body>
-                    </html>"""+ str(not_found_return)
+                    </html>"""+ str(not_found_return)+"""<html>
+                    <head></head>
+                    <br>
+                    <body><p>-----------------------<strong>Time Out</strong>---------------------------- <br></p></body>
+                    </html>"""+ str(time_out)
                     
             
 
