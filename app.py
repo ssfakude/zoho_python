@@ -58,6 +58,7 @@ access_token = refresh_auth()
 not_found_order =[]
 not_found_invoiced =[]
 not_found_return =[]
+logs =[]
 #----------User AUth----------
 names = ["Simphiwe Fakude", "Robert Jacobs", "Robert joubert","Jean-Pierre Myburg","Paul Oosthuizen", "Lee Douglas Webster", "Nazley Miranda", "Cindy Santamaria","Natasha Naidoo", "Carla kolbe",  "RC Admin"]
 usernames = ["simphiwef", "robertj","robert", "jp","paulo","leew","nazleym","cindys","natashan","carla",  "rcadmin"]
@@ -138,6 +139,7 @@ elif authentication_status:
                     
                     headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
                     latest_iteration = st.empty()
+                    print("-----------------------Invoiced-------------------")
                     len_df_Order =len(df_Order.index)
                     for i, j in df_Order.iterrows():
                         so_number = j[1]
@@ -233,11 +235,13 @@ elif authentication_status:
                                     print("ZZzzzz...")
                                     time.sleep(3)
                                     print("Was a nice sleep, now let me continue...")
+                                
                             
                             else:
                                 not_found_order.append(so_number)
+                            print("Search: ", req.status_code, " Update: ",req.status_code, " - ", so_number)
                     
-
+                    print("-----------------------Invoiced-------------------")
                     latest_iteration = st.empty()
                     len_df_Invoiced =len(df_Invoiced.index)
                     for i, j in df_Invoiced.iterrows():
@@ -313,9 +317,10 @@ elif authentication_status:
                             
                             else:
                                 not_found_invoiced.append(so_number)
+                            print("Search: ", req.status_code, " Update: ",req.status_code, " - ", so_number)
                     
 
-                
+                    print("-----------------------SRT-------------------")
                     len_df_Return =len(df_Return.index)
                     for i, j in df_Return.iterrows():
                         so_number = j[0]
@@ -334,7 +339,7 @@ elif authentication_status:
                             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
                             sync_date = dt_string.replace(" ", "T")+ ".000Z"
                             
-                            URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
+                            URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_sales_return_order_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
                             
                             
@@ -381,6 +386,7 @@ elif authentication_status:
                                 
                             else:
                                 not_found_return.append(so_number)
+                            print("Search: ", req.status_code, " Update: ",req.status_code, " - ", so_number)
                     stop = timeit.default_timer()
                     execution_time = stop - start
                     c = """<html>
@@ -402,8 +408,7 @@ elif authentication_status:
                     <body><p>-----------------------<strong>SRT</strong>---------------------------- <br></p></body>
                     </html>"""+ str(not_found_return)
                     
-                
-              
+            
 
 
                     email_body = """<html>
