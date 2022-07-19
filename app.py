@@ -350,7 +350,7 @@ elif authentication_status:
                             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
                             sync_date = dt_string.replace(" ", "T")+ ".000Z"
                             
-                            URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_sales_return_order_number:"+so_number
+                            URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
                             
                             
