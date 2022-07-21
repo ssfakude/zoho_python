@@ -45,11 +45,7 @@ def refresh_auth():
     data = json.loads(r.text)
     if 'access_token' in data:
         ZOHO_DATA['access_token'] = data['access_token']
-        #     print('refreshed', ZOHO_DATA)
-        #     time.sleep(3000)  # 50 minutes
-        # else:
-        #     # Retry after 1 minute
-        #     time.sleep(60)
+
     return data['access_token']
 
 
