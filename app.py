@@ -263,6 +263,7 @@ elif authentication_status:
                             cf_1nav_location_code = j[8]
                             cf_1nav_req_del_date = str(j[5])[:10]
                             cf_1nav_shipping_date = str(j[11])[:10]
+                            cf_1nav_doc_date =str(j[10])[:10]
                             now = datetime.now()
     
                          
@@ -301,6 +302,7 @@ elif authentication_status:
                         "cf_1nav_req_del_date":cf_1nav_req_del_date,
                         "cf_1nav_shipping_date":cf_1nav_shipping_date,
                         "cf_1nav_location_code": cf_1nav_location_code,
+                          "cf_1nav_doc_date": ,
                         "cf_1nav_overdue_bal":"false",
                         "cf_1nav_credit_hold":"false",
                         "cf_1nav_sync_time": sync_date,
@@ -340,6 +342,7 @@ elif authentication_status:
                             cf_1nav_sales_resp = j[3]
                             so_number = so_number[6:]
                             cf_1nav_location_code =j[4]
+                            cf_1nav_doc_date =str(j[8])[:10]
                             now = datetime.now()
     
                          
@@ -374,6 +377,7 @@ elif authentication_status:
                         "cf_1nav_customer_name":cf_1nav_customer_name,
                         "cf_1nav_sales_resp":cf_1nav_sales_resp,
                         "cf_1nav_location_code": cf_1nav_location_code,
+                        "cf_1nav_doc_date": cf_1nav_doc_date,
                         "cf_1nav_overdue_bal":"false",
                         "cf_1nav_credit_hold":"false",
                         "cf_1nav_sync_time": sync_date,
