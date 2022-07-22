@@ -81,7 +81,7 @@ elif authentication_status:
     lottie_dog=load_lottieurl("https://assets7.lottiefiles.com/packages/lf20_xBGyhl.json")
     with st_lottie_spinner(lottie_dog, width= 300, key="dog"):
 
-        @st.cache()
+        @st.cache(suppress_st_warnings=True)
         def read_file(data_file):
             #st.write(file_details)
             xls = pd.ExcelFile(data_file)
