@@ -484,7 +484,7 @@ elif authentication_status:
 
 
     # ---- HIDE STREAMLIT STYLE ----
-hide_st_style = """2218146
+hide_st_style = """
                 <style>
                 #MainMenu {visibility: hidden;}
                 footer {visibility: hidden;}
