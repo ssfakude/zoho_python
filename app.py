@@ -108,7 +108,7 @@ elif authentication_status:
 
         #time.sleep(4)
         def main():
-            st.title("1 Nav + Zoho Integration Test")
+            st.title("1 Nav + Zoho Integration")
             st.subheader("The file should contain this 3 sheets:")
             data_file = st.file_uploader("[Open Released, Posted Invoices ,SRT]",type=['xlsx'])
             # lottie_nodata=load_lottieurl("https://assets6.lottiefiles.com/packages/lf20_5awivhzm.json")
