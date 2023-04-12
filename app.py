@@ -327,6 +327,7 @@ elif authentication_status:
                     
 
                     print("-----------------------SRT-------------------")
+                    latest_iteration = st.empty()
                     len_df_Return =len(df_Return.index)
                     for i, j in df_Return.iterrows():
                         so_number = j[0]
