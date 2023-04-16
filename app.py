@@ -51,6 +51,17 @@ def refresh_auth():
 
 access_token = refresh_auth()
 
+
+def refresh_auth_sheet():
+
+    url = "https://accounts.zoho.com/oauth/v2/token?refresh_token=1000.54f3e043574c052a2f15da0fda3dfbf1.a333b8880943edc4fd63ce70a683acb5&client_id=1000.IF0P75VCEMT3TSHFLIQ51PAULXTRIE&client_secret=979f14078381980cc5ae6d7b903dca564c33529254&grant_type=refresh_token"
+    r = requests.post(url)
+    data = json.loads(r.text)
+    return data['access_token']
+
+global access_token_sheet
+access_token_sheet = refresh_auth_sheet()
+
 not_found_order =[]
 not_found_invoiced =[]
 not_found_return =[]
@@ -165,6 +176,58 @@ elif authentication_status:
                             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
                             sync_date=dt_string.replace(" ", "T")+ ".000Z"
                             status_ = j[0]
+                            #-------------------------------------append---------------------------
+                            oauthtoken = access_token_sheet
+                            resourceId = "2hy5j0f4bf936a7c1463a994656301f96f1ec"
+                            url = "https://sheet.zoho.com/api/v2/"+resourceId
+                            paramMap = {}
+                            paramMap['method'] = 'worksheet.records.add'
+                            paramMap['worksheet_name'] = 'Sheet2'
+                            paramMap['header_row'] = 1
+
+                            dataArray = []
+                            dataObj1 = {}
+                            dataObj1['Status'] = j[0]
+                            dataObj1['No.'] = j[1]
+                            dataObj1['Creation DateTime'] = dateTime
+                            dataObj1['Sell-to Customer No.'] = j[3]
+                            dataObj1['Sell-to Customer Name'] = j[4]
+                            dataObj1['Credit Hold'] = j[5]
+                            dataObj1['Overdue Balance Hold'] = j[6]
+                            dataObj1['Inserted By'] = j[7]
+                            dataObj1['Customer Price Group'] = j[8]
+                            dataObj1['Salesresponsible Code'] = j[9]  
+                            dataObj1['Location Code'] = j[10]
+                            dataObj1['Total Gross Weight'] = j[11] 
+                            dataObj1['Approved for Release'] = j[12]
+                        
+                        
+                            dataObj1['Origin'] = j[13]
+                            dataObj1['Approval Needed'] = j[14]
+                            dataObj1['Changed By'] = j[15]
+                            dataObj1['Postpone Invoicing'] = j[16]
+                            dataObj1['Invoice'] = j[17]
+                            dataObj1['Amount'] = j[18]
+                            dataObj1['EDI Status'] = j[19]
+                            dataObj1['Total Pallets'] = j[20]
+                            dataObj1['Total Pallet Places'] = j[21]
+                            dataObj1['Carrier Booking Number'] = j[22]
+
+                            
+                            dataArray.append(dataObj1)
+
+                            dataArray = json.dumps(dataArray)
+
+                            paramMap['json_data'] = dataArray
+
+                            headers = { 
+                            'Content-type':'application/x-www-form-urlencoded',  
+                            'Authorization':'Zoho-oauthtoken '+oauthtoken
+                            }
+                            response = requests.post(url = url, headers = headers, data = paramMap)
+                            print("Open- " ,response.status_code)
+                            #--------------------------------------end-----------------------------
+
                             if status_ == "Open":
                                 #desk_status = "Approval Rejected"
                                 desk_status = "Pending - finance query"
@@ -200,7 +263,7 @@ elif authentication_status:
                                 print("ZZzzzz...")
                                 time.sleep(2)
                                 print("Was a nice sleep, now let me continue...")
-                    
+                            
                         
                             
                             if req.status_code == 200:
@@ -265,12 +328,52 @@ elif authentication_status:
                             cf_1nav_shipping_date = str(j[11])[:10]
                             cf_1nav_doc_date =str(j[10])[:10]
                             now = datetime.now()
-    
+
                          
                             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
                             sync_date = dt_string.replace(" ", "T")+ ".000Z"
                         
-                        
+                            #------------------------------Append---------------------------------
+
+                            oauthtoken = access_token_sheet
+                            resourceId = "2hy5jb8fa5518492b44df9019c04cd0a7dc65"
+                            url = "https://sheet.zoho.com/api/v2/"+resourceId
+                            paramMap = {}
+                            paramMap['method'] = 'worksheet.records.add'
+                            paramMap['worksheet_name'] = 'Sheet2'
+                            paramMap['header_row'] = 1
+
+                            dataArray = []
+                            dataObj1 = {}
+                            dataObj1['No.'] = j[0]
+                            dataObj1['Sell-to Customer No.'] = j[1]
+                            dataObj1['Sell-to Customer Name'] = j[2]
+                            dataObj1['Amount'] = j[3]
+                            dataObj1['Order Date'] = str(j[4])
+                            dataObj1['Requested Delivery Date'] =str(j[5])
+                            dataObj1['Order No.'] = j[6]
+                            dataObj1['Salesresponsible Code'] = j[7]
+                            dataObj1['Location Code'] = j[8]
+                            dataObj1['Total Net Weight'] = j[9]
+                            dataObj1['Document Date'] =cf_1nav_req_del_date
+                            dataObj1['Shipment Date'] = cf_1nav_shipping_date
+                            dataObj1['Inserted By'] = j[12]
+                            dataObj1['Customer Class'] = j[13]
+                            dataObj1['Product Range Code'] = j[14]
+                            
+                            dataArray.append(dataObj1)
+
+                            dataArray = json.dumps(dataArray)
+
+                            paramMap['json_data'] = dataArray
+
+                            headers = { 
+                            'Content-type':'application/x-www-form-urlencoded',  
+                            'Authorization':'Zoho-oauthtoken '+oauthtoken
+                            }
+                            response = requests.post(url = url, headers = headers, data = paramMap)
+                            print("Invoiced - ",response.status_code)
+                            #-------------------------------end-----------------------------------
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
                             
@@ -349,7 +452,41 @@ elif authentication_status:
                          
                             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
                             sync_date = dt_string.replace(" ", "T")+ ".000Z"
-                            
+                            #-----------------------------------------Append--------------------------------------
+                            oauthtoken = access_token_sheet
+                            resourceId = "2hy5j4b78c4f8a296477e8ffd0f798daaf66e"
+                            url = "https://sheet.zoho.com/api/v2/"+resourceId
+                            paramMap = {}
+                            paramMap['method'] = 'worksheet.records.add'
+                            paramMap['worksheet_name'] = 'Sheet2'
+                            paramMap['header_row'] = 1
+
+
+                            dataArray = []
+                            dataObj1 = {}
+                            dataObj1['No.'] = j[0]
+                            dataObj1['Sell-to Customer No.'] =  j[1]
+                            dataObj1['Sell-to Customer Name'] =  j[2]
+                            dataObj1['Salesresponsible Code'] =  j[3]
+                            dataObj1['Location Code'] = j[4]
+                            dataObj1['Your Reference'] = j[5]
+                            dataObj1['Inserted By'] =  j[6]
+                            dataObj1['Customer Class'] =  j[7]
+                            dataObj1['Document Date'] = str(j[8])
+                            dataObj1['Amount'] =  j[9]
+                            dataArray.append(dataObj1)
+
+                            dataArray = json.dumps(dataArray)
+
+                            paramMap['json_data'] = dataArray
+
+                            headers = { 
+                            'Content-type':'application/x-www-form-urlencoded',  
+                            'Authorization':'Zoho-oauthtoken '+oauthtoken
+                            }
+                            response = requests.post(url = url, headers = headers, data = paramMap)
+                            print("Srt - ",response.status_code)
+                            #-----------------------------------------end-----------------------------------------
                             URL = "https://desk.zoho.com/api/v1/tickets/search?limit=1&customField1=cf_s_o_number:"+so_number
                             headers = {"Authorization" : "Zoho-oauthtoken "+access_token, "orgId": "725575894"}
                             
@@ -446,7 +583,7 @@ elif authentication_status:
                     "cf_ticket_type":"1Nav error",
                     }
                     }
-                    r = requests.post(url, headers=headers, json=data)
+                    #r = requests.post(url, headers=headers, json=data)
                     
                     url = 'https://mail.zoho.com/api/accounts/6014958000000008002/messages'
                 
