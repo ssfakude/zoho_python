@@ -62,6 +62,18 @@ def refresh_auth_sheet():
 global access_token_sheet
 access_token_sheet = refresh_auth_sheet()
 
+
+def floatify(value):
+
+ 
+    if pd.isna(value) ==True:
+        return ""
+    if ":" in str(value):
+        return 0.0
+    else:
+   
+        float_= value.replace(' ','')
+        return float(float_.replace(',','.'))
 not_found_order =[]
 not_found_invoiced =[]
 not_found_return =[]
@@ -157,7 +169,7 @@ elif authentication_status:
                         if pd.isna(so_number) ==True:
                             break
                         else:
-                            
+
                             so_number = so_number[5:]
                             dateTime= str(j[2])
                             dateTime = dateTime.replace(" ", "T")
@@ -189,7 +201,7 @@ elif authentication_status:
                             dataObj1 = {}
                             dataObj1['Status'] = j[0]
                             dataObj1['No.'] = j[1]
-                            dataObj1['Creation DateTime'] = dateTime
+                            dataObj1['Creation DateTime'] =dateTime
                             dataObj1['Sell-to Customer No.'] = j[3]
                             dataObj1['Sell-to Customer Name'] = j[4]
                             dataObj1['Credit Hold'] = j[5]
@@ -198,7 +210,7 @@ elif authentication_status:
                             dataObj1['Customer Price Group'] = j[8]
                             dataObj1['Salesresponsible Code'] = j[9]  
                             dataObj1['Location Code'] = j[10]
-                            dataObj1['Total Gross Weight'] = j[11] 
+                            dataObj1['Total Gross Weight'] = floatify(str(j[11]) )
                             dataObj1['Approved for Release'] = j[12]
                         
                         
@@ -207,12 +219,14 @@ elif authentication_status:
                             dataObj1['Changed By'] = j[15]
                             dataObj1['Postpone Invoicing'] = j[16]
                             dataObj1['Invoice'] = j[17]
-                            dataObj1['Amount'] = j[18]
+                            dataObj1['Amount'] = floatify(str(j[18]) )
                             dataObj1['EDI Status'] = j[19]
-                            dataObj1['Total Pallets'] = j[20]
-                            dataObj1['Total Pallet Places'] = j[21]
-                            dataObj1['Carrier Booking Number'] = j[22]
+                            dataObj1['Total Pallets'] = floatify(str(j[20]))
+                            dataObj1['Total Pallet Places'] = floatify(str(j[21]) )
+                            dataObj1['Carrier Booking Number'] = j[22] 
 
+                            dataObj1['fun'] ="=_PING("+str(dataObj1)+")"
+                            
                             
                             dataArray.append(dataObj1)
 
@@ -316,6 +330,7 @@ elif authentication_status:
                         if pd.isna(so_number) ==True:
                             break
                         else:
+                  
                             
                             so_number = so_number[5:]
                             cf_1nav_customer_name= j[2]
@@ -348,13 +363,16 @@ elif authentication_status:
                             dataObj1['No.'] = j[0]
                             dataObj1['Sell-to Customer No.'] = j[1]
                             dataObj1['Sell-to Customer Name'] = j[2]
-                            dataObj1['Amount'] = j[3]
+                            
+                           
+                            dataObj1['Amount'] =  floatify(str(j[3]) )
+                          
                             dataObj1['Order Date'] = str(j[4])
                             dataObj1['Requested Delivery Date'] =str(j[5])
                             dataObj1['Order No.'] = j[6]
                             dataObj1['Salesresponsible Code'] = j[7]
                             dataObj1['Location Code'] = j[8]
-                            dataObj1['Total Net Weight'] = j[9]
+                            dataObj1['Total Net Weight'] = floatify(str(j[9]) )
                             dataObj1['Document Date'] =cf_1nav_req_del_date
                             dataObj1['Shipment Date'] = cf_1nav_shipping_date
                             dataObj1['Inserted By'] = j[12]
@@ -472,8 +490,8 @@ elif authentication_status:
                             dataObj1['Your Reference'] = j[5]
                             dataObj1['Inserted By'] =  j[6]
                             dataObj1['Customer Class'] =  j[7]
-                            dataObj1['Document Date'] = str(j[8])
-                            dataObj1['Amount'] =  j[9]
+                            dataObj1['Document Date'] = str(j[8])                          
+                            dataObj1['Amount'] =  floatify(str(j[9]) )
                             dataArray.append(dataObj1)
 
                             dataArray = json.dumps(dataArray)
