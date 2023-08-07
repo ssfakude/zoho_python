@@ -634,8 +634,8 @@ elif authentication_status:
 
 
                     st.markdown("<h2 style='text-align: center; color: white;'>Synchronization completed!</h2>", unsafe_allow_html=True)
-                    lottie_nodata=load_lottieurl("https://lottie.host/?file=e686c78b-e554-498d-aaa1-e045ea2e2df9/iZMW2qsupf.json")
-                   # lottie_nodata=load_lottieurl("https://assets7.lottiefiles.com/private_files/lf30_rjqwaenm.json")
+                    #lottie_nodata=load_lottieurl("https://lottie.host/?file=e686c78b-e554-498d-aaa1-e045ea2e2df9/iZMW2qsupf.json")
+                    lottie_nodata=load_lottieurl("https://assets7.lottiefiles.com/private_files/lf30_rjqwaenm.json")
                     #st_lottie(lottie_nodata, key="done", width=270) https://lottie.host/?file=e686c78b-e554-498d-aaa1-e045ea2e2df9/iZMW2qsupf.json
                     st.balloons()
                     print("-----------------------------------------------")
