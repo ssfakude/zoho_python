@@ -104,7 +104,7 @@ elif authentication_status:
     lottie_dog=load_lottieurl("https://assets7.lottiefiles.com/packages/lf20_xBGyhl.json")
     with st_lottie_spinner(lottie_dog, width= 300, key="dog"):
 
-        @st.cache()
+        @st.cache_data
         def read_file(data_file):
             
             xls = pd.ExcelFile(data_file)
@@ -148,7 +148,7 @@ elif authentication_status:
                     # st.write(file_details)
                     # df = pd.read_csv(data_file)
                     # left_column, middle_column, right_column  = st.columns(3)
-                    # with left_column:
+                    # with left_column:Class
                     #     st.dataframe(df_Order)
                     # with middle_column:
                     #     st.dataframe(df_Invoiced)
@@ -182,6 +182,7 @@ elif authentication_status:
                             cf_1nav_net_weight = j[11]
                             cf_1nav_amount = j[18]
                             cf_1nav_location_code = j[10]
+                            cf_1nav_bdo = j[24]
                             now = datetime.now()
     
                          
@@ -224,6 +225,7 @@ elif authentication_status:
                             dataObj1['Total Pallets'] = floatify(str(j[20]))
                             dataObj1['Total Pallet Places'] = floatify(str(j[21]) )
                             dataObj1['Carrier Booking Number'] = j[22] 
+                            dataObj1['BDO'] = j[24] 
 
                             dataObj1['fun'] ="=_PING("+str(dataObj1)+")"
                             
@@ -298,6 +300,7 @@ elif authentication_status:
                                     "cf_1nav_overdue_bal":cf_1nav_overdue_bal,
                                     "cf_1nav_credit_hold":cf_1nav_credit_hold,
                                     "cf_1nav_location_code": cf_1nav_location_code,
+                                    "cf_1nav_bdo":cf_1nav_bdo,
                                     "cf_1nav_sync_time": sync_date,
 
                                     "cf_added_by": name
@@ -342,6 +345,7 @@ elif authentication_status:
                             cf_1nav_req_del_date = str(j[5])[:10]
                             cf_1nav_shipping_date = str(j[11])[:10]
                             cf_1nav_doc_date =str(j[10])[:10]
+                            cf_1nav_bdo = j[18]
                             now = datetime.now()
 
                          
@@ -378,6 +382,8 @@ elif authentication_status:
                             dataObj1['Inserted By'] = j[12]
                             dataObj1['Customer Class'] = j[13]
                             dataObj1['Product Range Code'] = j[14]
+                            dataObj1['BDO'] = j[18]
+                            
                             
                             dataArray.append(dataObj1)
 
@@ -427,6 +433,7 @@ elif authentication_status:
                         "cf_1nav_overdue_bal":"false",
                         "cf_1nav_credit_hold":"false",
                         "cf_1nav_sync_time": sync_date,
+                        "cf_1nav_bdo":cf_1nav_bdo,
                          "cf_added_by": name
                     }
                     }		
@@ -465,6 +472,7 @@ elif authentication_status:
                             so_number = so_number[6:]
                             cf_1nav_location_code =j[4]
                             cf_1nav_doc_date =str(j[8])[:10]
+                            cf_1nav_bdo= j[10]
                             now = datetime.now()
     
                          
@@ -492,6 +500,7 @@ elif authentication_status:
                             dataObj1['Customer Class'] =  j[7]
                             dataObj1['Document Date'] = str(j[8])                          
                             dataObj1['Amount'] =  floatify(str(j[9]) )
+                            dataObj1['BDO'] =  j[10]
                             dataArray.append(dataObj1)
 
                             dataArray = json.dumps(dataArray)
@@ -537,6 +546,7 @@ elif authentication_status:
                         "cf_1nav_overdue_bal":"false",
                         "cf_1nav_credit_hold":"false",
                         "cf_1nav_sync_time": sync_date,
+                        "cf_1nav_bdo": cf_1nav_bdo,
                          "cf_added_by": name
 
                             }
@@ -624,8 +634,9 @@ elif authentication_status:
 
 
                     st.markdown("<h2 style='text-align: center; color: white;'>Synchronization completed!</h2>", unsafe_allow_html=True)
-                    lottie_nodata=load_lottieurl("https://assets7.lottiefiles.com/private_files/lf30_rjqwaenm.json")
-                    #st_lottie(lottie_nodata, key="done", width=270)
+                    lottie_nodata=load_lottieurl("https://lottie.host/?file=e686c78b-e554-498d-aaa1-e045ea2e2df9/iZMW2qsupf.json")
+                   # lottie_nodata=load_lottieurl("https://assets7.lottiefiles.com/private_files/lf30_rjqwaenm.json")
+                    #st_lottie(lottie_nodata, key="done", width=270) https://lottie.host/?file=e686c78b-e554-498d-aaa1-e045ea2e2df9/iZMW2qsupf.json
                     st.balloons()
                     print("-----------------------------------------------")
 
