@@ -60,139 +60,123 @@ if authentication_status == False:
 # elif authentication_status == None:
 #     st.warning('Please enter your username and password')
 elif authentication_status:
-   
-    def load_lottieurl(url: str): #load from the web
-       
-        r = requests.get(url)
-        if r.status_code != 200:
-            return None
-        return r.json()
-    st.write(f'Welcome  *{name}*')
-    lottie_dog=load_lottieurl("https://assets7.lottiefiles.com/packages/slewLW4YOw.json") 
-    with st_lottie_spinner(lottie_dog, width= 300, key="dog"):
-
-
-        @st.cache_data
-        def read_file(data_file):
-            
-            xls = pd.ExcelFile(data_file)
-            
-            try:
-                df_leads = pd.read_excel(xls, 'Leads')
-            except Exception as e:
-                st.error("Incorect Sheet name for Leads:(")
-                st.stop()
-           
-            return df_leads
+    @st.cache_data
+    def read_file(data_file):
+        
+        xls = pd.ExcelFile(data_file)
+        
+        try:
+            df_leads = pd.read_excel(xls, 'Leads')
+        except Exception as e:
+            st.error("Incorect Sheet name for Leads:(")
+            st.stop()
+        
+        return df_leads
 
 
 
 
-        #time.sleep(4)
-        def main():
-            st.title("AUTO GENERAL INTEGRATION")
-            st.subheader("NB, make sure the file is type XLSX:")
-            data_file = st.file_uploader("[Leads]",type=['xlsx'])
-            campaign = st.radio(
-    "Select Campaign",
-    ["BUDGET-BDM", "DIALDIRECT-DDMP3", "AUTO_GENERAL-AGPI", "FIRST_WOMAN-FDMP3"],
-    index=None,
+    #time.sleep(4)
+    def main():
+        st.title("AUTO GENERAL INTEGRATION")
+        st.subheader("NB, make sure the file is type XLSX:")
+        data_file = st.file_uploader("[Leads]",type=['xlsx'])
+        campaign = st.radio(
+"Select Campaign",
+["BUDGET-BDM", "DIALDIRECT-DDMP3", "AUTO_GENERAL-AGPI", "FIRST_WOMAN-FDMP3"],
+index=None,
 )
 
-            st.write("You selected:", campaign)
-            # lottie_nodata=load_lottieurl("https://assets6.lottiefiles.com/packages/lf20_5awivhzm.json")
-            # st_lottie(lottie_nodata, key="load", width=600)
-           
-            
+        st.write("You selected:", campaign)
+        successful_responses = []
 
-            # Initialize an empty DataFrame
-            response_df = pd.DataFrame(columns=["Email", "Response Status Code", "Name"])
-            successful_responses = []
- 
-            if st.button("Process" ):
-                if campaign == None:
-                    st.error("Please Select Campaign")
-                else:
-                   
-                    if data_file is not None:
-                        file_details = {"Filename":data_file.name,"FileType":data_file.type,"FileSize":data_file.size}
+        if st.button("Process" ):
+            if campaign == None:
+                st.error("Please Select Campaign")
+            else:
+                
+                if data_file is not None:
+                    file_details = {"Filename":data_file.name,"FileType":data_file.type,"FileSize":data_file.size}
 
-                        df_leads = read_file(data_file)
-        
-                        
+                    df_leads = read_file(data_file)
+    
                     
-                        latest_iteration = st.empty()
-                        print("-----------------------Leads------------------")
-                        len_df_leads =len(df_leads.index)
-                        
-        
-
-                        for i, j in df_leads.iterrows():
-                            email = j[2]
-                            if len_df_leads - i == 1:
-                                latest_iteration.text('Done Loading Leads')
-                            else:
-                                latest_iteration.text(f'Leads: {len_df_leads - i} records left - {j[2]}')
-                            if pd.isna(email) ==True:
-                                break
-                            else:
-                            
-                                
-                                firstname=  j[0]
-                                lastname =  j[1]
-                                email = str(j[2])
-                                id_number =  str(j[4])
-            
-                                comments  =str(j[5])
-                                phone1= "0"+str(j[3])
-        
-                                sid ="99786998"
-                                
-                                if campaign =="BUDGET-BDM":
-                                    campid = "ALPHA-TLSRBDGT-WARM"
-                                # if campaign =="DIALDIRECT-DDMP3":
-                                #     campid = "ALPHA-TLSR-DIAL-WARM"
-                                # if campaign =="AUTO_GENERAL-AGPI":
-                                #     campid = "ALPHA-TLSRBDGT-WARM"
-                                # if campaign =="FIRST_WOMAN-FDMP3":
-                                #     campid = "ALPHA-TLSRBDGT-WARM"
-                                
+                
+                    latest_iteration = st.empty()
+                    print("-----------------------Leads------------------")
+                    len_df_leads =len(df_leads.index)
+                    
     
 
-                            
-                                current_datetime = datetime.now()
-                                current_date_time = current_datetime.strftime("%m/%d/%Y, %H:%M:%S")
-                            
-                                url = "https://icon.leadbyte.co.uk/restapi/v1.3/leads?campid="+campid+"&sid="+sid+"&email="+email+"&firstname="+firstname+"&lastname="+lastname+"&phone1="+phone1+"&id_number="+id_number+"&comments"+comments
-                                
-                                
-                                headers = {"X_KEY": "42d9b732862a56c33ed59dca9f2b43b1", "Content-Type": "application/json"}
-                                response = requests.post(url = url, headers=headers)
-                                print("Leads- ",response.content, phone1)
-                                if response.status_code == 200: 
-                                    status_ = "Success"
-                                else:
-                                     status_ = "Fail"
-
-                                successful_responses.append({ 'Status': status_  ,'Name': firstname,   'Last Name': lastname , 'Email': email, 'Phone': phone1, 'Id Number': id_number, 'Comments': comments, })
-
-                         
-                            
-                        if successful_responses:
-                            df_successful_responses = pd.DataFrame(successful_responses)
-                            st.write(df_successful_responses)
+                    for i, j in df_leads.iterrows():
+                        email = j[2]
+                        if len_df_leads - i == 1:
+                            latest_iteration.text('Done Loading Leads')
                         else:
-                            st.write("No successful responses found.")  
-                        st.markdown("<h2 style='text-align: center; color: white;'>Data Upload completed!</h2>", unsafe_allow_html=True)
-                        #lottie_nodata=load_lottieurl("https://lottie.host/?file=e686c78b-e554-498d-aaa1-e045ea2e2df9/iZMW2qsupf.json")
-                        #lottie_nodata=load_lottieurl("https://assets7.lottiefiles.com/private_files/lf30_rjqwaenm.json")
-                        #st_lottie(lottie_nodata, key="done", width=270) https://lottie.host/?file=e686c78b-e554-498d-aaa1-e045ea2e2df9/iZMW2qsupf.json
-                        #st.balloons()
-                        print("-----------------------------------------------")
-            
+                            latest_iteration.text(f'Leads: {len_df_leads - i} records left - {j[2]}')
+                        if pd.isna(email) ==True:
+                            break
+                        else:
+                        
+                            
+                            firstname=  j[0]
+                            lastname =  j[1]
+                            email = str(j[2])
+                            id_number =  str(j[4])
         
-        if __name__ == '__main__':
-            main()
+                            comments  =str(j[5])
+                            phone1= str(j[3])
+                            if phone1[0] !="0":
+                                phone1= "0"+str(j[3])
+    
+                            sid ="99786998"
+                            
+                            if campaign =="BUDGET-BDM":
+                                campid = "ALPHA-TLSRBDGT-WARM"
+                            # if campaign =="DIALDIRECT-DDMP3":
+                            #     campid = "ALPHA-TLSR-DIAL-WARM"
+                            # if campaign =="AUTO_GENERAL-AGPI":
+                            #     campid = "ALPHA-TLSRBDGT-WARM"
+                            # if campaign =="FIRST_WOMAN-FDMP3":
+                            #     campid = "ALPHA-TLSRBDGT-WARM"
+                            
+
+
+                        
+                            current_datetime = datetime.now()
+                            current_date_time = current_datetime.strftime("%m/%d/%Y, %H:%M:%S")
+                        
+                            url = "https://icon.leadbyte.co.uk/restapi/v1.3/leads?campid="+campid+"&sid="+sid+"&email="+email+"&firstname="+firstname+"&lastname="+lastname+"&phone1="+phone1+"&id_number="+id_number+"&comments"+comments
+                            
+                            
+                            headers = {"X_KEY": "42d9b732862a56c33ed59dca9f2b43b1", "Content-Type": "application/json"}
+                            response = requests.post(url = url, headers=headers)
+                            print("Leads- ",response.content, phone1)
+                            if response.status_code == 200: 
+                                status_ = "Success"
+                            else:
+                                    status_ = "Fail"
+                            rep= response.content
+                            response_data = json.loads(rep)
+                            error_message = response_data.get('message', None)
+                            # Extract errors array
+                            errors = response_data.get('errors', None)
+                            successful_responses.append({ 'Status': status_  , "Warning/Errors": errors,'Name': firstname,   'Last Name': lastname , 'Email': email, 'Phone': phone1, 'Id Number': id_number, 'Comments': comments })
+
+                        
+                        
+                    if successful_responses:
+                        df_successful_responses = pd.DataFrame(successful_responses)
+                        st.write(df_successful_responses)
+                    else:
+                        st.write("No successful responses found.")  
+                    st.markdown("<h2 style='text-align: center; color: white;'>Data Upload completed!</h2>", unsafe_allow_html=True)
+                
+                    print("-----------------------------------------------")
+        
+    
+    if __name__ == '__main__':
+        main()
 
 
 
